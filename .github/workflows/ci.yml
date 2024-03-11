@@ -52,3 +52,4 @@ jobs:
           IMAGE_NAME=$REGISTRY_LOGIN/${{vars.REPO_NAME}}:${{ github.sha }}
           docker pull $IMAGE_NAME
           docker run $IMAGE_NAME php artisan test
+
