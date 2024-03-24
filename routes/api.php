@@ -19,3 +19,4 @@ Route::middleware('auth:sanctum')->get(
         return $request->user();
     }
 );
+
