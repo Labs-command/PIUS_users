@@ -59,16 +59,14 @@ jobs:
 
   deploy:
     name: Deploy
-    runs-on: ubuntu-latest
     needs: test
-    steps:
-      - name: Install ssh key
-        run: |
-          echo y | ssh-keygen -f ~/.ssh/id_rsa
-          sshpass -p '' ssh-copy-id -i ~/.ssh/id_rsa.pub $SERVER_USERNAME@$SERVER_IP
-      - name: Deploy to server
-        run: |
-          sshpass -p '' ssh $SERVER_USERNAME@$SERVER_IP <<EOF
-            docker compose -f $COMPOSE_PATH pull
-            docker compose -f $COMPOSE_PATH up -d
-          EOF
+    uses: appleboy/ssh-action@v1.0.3
+    with:
+      host: ${{ secrets.SERVER_IP }}
+      username: ${{ secrets.SERVER_USERNAME }}
+      key: ${{ secrets.SERVER_KEY }}
+      port: 22
+      script: |
+        docker compose -f $COMPOSE_PATH pull
+        docker compose -f $COMPOSE_PATH up -d
+
