@@ -9,14 +9,14 @@ on:
       - main
 
 env:
-  REGISTRY_LOGIN: ${{ variables.REGISTRY_LOGIN }}
+  REGISTRY_LOGIN: ${{ vars.REGISTRY_LOGIN }}
   REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
   ENV: ${{ secrets.DEV_ENV }}
   SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
   SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
   SERVER_IP: ${{ secrets.SERVER_IP }}
-  COMPOSE_PATH: ${{ variables.COMPOSE_PATH }}
-  REPO_NAME: ${{ variables.REPO_NAME }}
+  COMPOSE_PATH: ${{ vars.COMPOSE_PATH }}
+  REPO_NAME: ${{ vars.REPO_NAME }}
 
 jobs:
   build:
