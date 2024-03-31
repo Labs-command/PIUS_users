@@ -66,12 +66,13 @@ jobs:
     steps:
       - name: Install ssh key
         run: |
-          ssh-keygen -f ~/.ssh/id_rsa
-          ssh-copy-id -i ~/.ssh/id_rsa.pub $SERVER_USERNAME@$SERVER_IP
+          apt install -y sshpass
+          echo y | ssh-keygen -f ~/.ssh/id_rsa
+          sshpass -p '' ssh-copy-id -i ~/.ssh/id_rsa.pub $SERVER_USERNAME@$SERVER_IP
 
       - name: Deploy to server
         run: |
-          ssh $SERVER_USERNAME@$SERVER_IP <<EOF
+          sshpass -p '' ssh $SERVER_USERNAME@$SERVER_IP <<EOF
             docker compose -f $COMPOSE_PATH pull
             docker compose -f $COMPOSE_PATH up -d
           EOF
