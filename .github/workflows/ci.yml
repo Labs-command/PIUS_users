@@ -59,15 +59,16 @@ jobs:
 
   deploy:
     name: Deploy
-    uses: matheusvanzan/sshpass-action@v2
     runs-on: ubuntu-latest
     needs: test
     steps:
       - name: Install ssh key
+        uses: easingthemes/ssh-deploy@main
         run: |
           echo y | ssh-keygen -f ~/.ssh/id_rsa
           sshpass -p '' ssh-copy-id -i ~/.ssh/id_rsa.pub $SERVER_USERNAME@$SERVER_IP
       - name: Deploy to server
+        uses: easingthemes/ssh-deploy@main
         run: |
           sshpass -p '' ssh $SERVER_USERNAME@$SERVER_IP <<EOF
             docker compose -f $COMPOSE_PATH pull
