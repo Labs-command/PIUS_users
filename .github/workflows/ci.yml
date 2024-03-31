@@ -16,6 +16,7 @@ env:
   SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
   SERVER_IP: ${{ secrets.SERVER_IP }}
   COMPOSE_PATH: ${{ secrets.COMPOSE_PATH }}
+  REPO_NAME: ${{ secrets.REPO_NAME }}
 
 jobs:
   build:
@@ -32,7 +33,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          IMAGE_NAME=$REGISTRY_LOGIN/${{ github.repository }}:${{ github.sha }}
+          IMAGE_NAME=$REGISTRY_LOGIN/$REPO_NAME:${{ github.sha }}
           printf "%s" "$ENV" >> .env
           docker build . -t $IMAGE_NAME
           docker push $IMAGE_NAME
@@ -52,7 +53,7 @@ jobs:
 
       - name: Pull Docker image
         run: |
-          IMAGE_NAME=$REGISTRY_LOGIN/${{ github.repository }}:${{ github.sha }}
+          IMAGE_NAME=$REGISTRY_LOGIN/$REPO_NAME:${{ github.sha }}
           docker pull $IMAGE_NAME
           docker run $IMAGE_NAME php artisan test || (echo "Tests failed" && docker rmi $IMAGE_NAME && exit 1)
 
