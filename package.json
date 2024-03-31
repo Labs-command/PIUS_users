@@ -9,5 +9,13 @@
         "axios": "^1.6.4",
         "laravel-vite-plugin": "^1.0.0",
         "vite": "^5.0.0"
+    },
+    "dependencies": {
+        "boostrap": "^2.0.0",
+        "bootstrap": "^5.2.0-beta1",
+        "laravel-mix": "^6.0.49",
+        "popper.js": "^1.16.1",
+        "prismjs": "^1.29.0",
+        "vanilla-lazyload": "^19.0.5"
     }
 }

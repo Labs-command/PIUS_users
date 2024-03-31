@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserRolesController;
+use App\Http\Controllers\ViewsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +25,6 @@ Route::get('/user/roles', [UserRolesController::class, 'list']);
 Route::put('/user/roles', [UserRolesController::class, 'set']);
 Route::post('/user/roles', [UserRolesController::class, 'add']);
 Route::delete('/user/roles', [UserRolesController::class, 'remove']);
+
+Route::get('/', [ViewsController::class, 'index']);
+
