@@ -35,7 +35,7 @@ jobs:
         run: |
           cat routes/web.php
           IMAGE_NAME=$REGISTRY_LOGIN/$REPO_NAME:${{ github.sha }}
-          printf "%s" "$ENV" >> .env
+          printf "%s" "$ENV" > .env
           docker build . -t $IMAGE_NAME
           docker push $IMAGE_NAME
 
@@ -77,7 +77,7 @@ jobs:
             IMAGE_NAME=$REGISTRY_LOGIN/$REPO_NAME:${{ github.sha }}
             echo ${{ vars.COMPOSE_PATH }}
             mkdir -p ${{ vars.COMPOSE_PATH }}
-            printf "%s" "$COMPOSE" >> ${{ vars.COMPOSE_PATH }}/docker-compose.yml
+            printf "%s" "$COMPOSE" > ${{ vars.COMPOSE_PATH }}/docker-compose.yml
             sed -i "s|~IMAGE~|$IMAGE_NAME|g" ${{ vars.COMPOSE_PATH }}/docker-compose.yml
             docker-compose -f ${{ vars.COMPOSE_PATH }}/docker-compose.yml pull
             docker-compose -f ${{ vars.COMPOSE_PATH }}/docker-compose.yml restart
