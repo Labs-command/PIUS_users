@@ -73,7 +73,7 @@ jobs:
           key: ${{ secrets.SERVER_KEY }}
           port: 22
           script: |
-            IMAGE_NAME=$REGISTRY_LOGIN/${{ vars.REGISTRY_LOGIN }}:${{ github.sha }}
+            IMAGE_NAME=${{ vars.REGISTRY_LOGIN }}/${{ vars.REGISTRY_LOGIN }}:${{ github.sha }}
             mkdir -p ${{ vars.COMPOSE_PATH }}
             rm ${{ vars.COMPOSE_PATH }}/docker-compose.yml
             printf "%s" "${{ vars.DOCKER_COMPOSE }}" >> ${{ vars.COMPOSE_PATH }}/docker-compose.yml
