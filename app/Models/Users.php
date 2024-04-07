@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Ramsey\Uuid\Uuid;
 
 class Users extends Model
@@ -18,7 +19,7 @@ class Users extends Model
     public $incrementing = false;
     protected $primaryKey = 'user_id';
 
-    public function roles()
+    public function roles(): HasMany
     {
         return $this->hasMany(UserRoles::class, 'user_id');
     }

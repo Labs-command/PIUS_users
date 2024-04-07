@@ -1,27 +1,36 @@
 <?php
 
 namespace App\Services;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use App\Models\Users;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class UsersService
 {
-    public function list($request)
+    public function list($request): Collection|array
     {
         $query = Users::query();
 
-        if ($request->has('user_id')) {
-            $query->where('user_id', $request->input('user_id'));
+        if ($request->has('search_field') && $request->has('search_value')) {
+            $query->where($request->input('search_field'), 'like', '%' . $request->input('search_value') . '%');
         }
 
-        if ($request->has('state')) {
-            $query->where('state', $request->input('state'));
+        $sortOrder = $request->has('sort_order') ? $request->input('sort_order') : "asc";
+        echo $sortOrder;
+        if ($request->has('sort_field')) {
+            $sortField = $request->input('sort_field');
+            $query->orderBy($sortField, $sortOrder);
         }
+
+        $offset = $request->has('offset') ? intval($request->input('offset')) : 0;
+        $limit = $request->has('limit') ? intval($request->input('limit')) : 10;
+        $query->offset($offset)->limit($limit);
 
         if ($request->has('role')) {
             $query->whereHas(
-                'roles', function ($query) use ($request) {
+                'roles', function (Builder $query) use ($request) {
                     $query->where('role', $request->input('role'));
                 }
             );
@@ -30,7 +39,7 @@ class UsersService
         return $query->get();
     }
 
-    public function create($data)
+    public function create($data): array
     {
         try {
             DB::transaction(
@@ -58,7 +67,7 @@ class UsersService
         }
     }
 
-    public function update($data)
+    public function update($data): array
     {
         try {
             $userId = $data['user_id'];
@@ -78,7 +87,7 @@ class UsersService
         }
     }
 
-    public function delete($data)
+    public function delete($data): array
     {
         try {
             $userId = $data['user_id'];
