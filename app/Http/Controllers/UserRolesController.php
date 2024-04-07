@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Services\UserRolesService;
 class UserRolesController
 {
-    protected $userRolesService;
+    protected UserRolesService $userRolesService;
 
     public function __construct(UserRolesService $userRolesService)
     {
         $this->userRolesService = $userRolesService;
     }
 
-    public function add(Request $request)
+    public function add(Request $request): JsonResponse
     {
         $data = $request->json()->all();
 
@@ -26,7 +27,7 @@ class UserRolesController
         return response()->json($result);
     }
 
-    public function remove(Request $request)
+    public function remove(Request $request): JsonResponse
     {
         $data = $request->json()->all();
 
@@ -39,7 +40,7 @@ class UserRolesController
         return response()->json($result);
     }
 
-    public function set(Request $request)
+    public function set(Request $request): JsonResponse
     {
         $data = $request->json()->all();
 
@@ -51,7 +52,7 @@ class UserRolesController
 
         return response()->json($result);
     }
-    public function list(Request $request)
+    public function list(Request $request): JsonResponse
     {
         $result = $this->userRolesService->list($request->input('user_id'));
 

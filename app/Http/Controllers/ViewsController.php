@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
+
 class ViewsController
 {
-    public function userPage()
+    public function userPage(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $tasks = array(
             array(
@@ -32,7 +36,7 @@ class ViewsController
         );
         return view('tasks', ['tasks' => $tasks]);
     }
-    public function moderatorPage()
+    public function moderatorPage(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $tasks = array(
             array(

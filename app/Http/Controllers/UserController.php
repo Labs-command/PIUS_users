@@ -3,24 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Services\UsersService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 class UserController
 {
-    protected $userService;
+    protected UsersService $userService;
 
     public function __construct(UsersService $userService)
     {
         $this->userService = $userService;
     }
 
-    public function list(Request $request)
+    public function list(Request $request): JsonResponse
     {
         $users = $this->userService->list($request);
 
         return response()->json($users);
     }
 
-    public function create(Request $request)
+    public function create(Request $request): JsonResponse
     {
         $data = $request->json()->all();
 
@@ -29,7 +30,7 @@ class UserController
         return response()->json($result['message'], $result['code'] ?? 200);
     }
 
-    public function update(Request $request)
+    public function update(Request $request): JsonResponse
     {
         $data = $request->json()->all();
 
@@ -42,7 +43,7 @@ class UserController
         return response()->json($result['message']);
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         $data = $request->json()->all();
 
