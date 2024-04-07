@@ -67,7 +67,6 @@ jobs:
 
       - name: Deploy with Docker Compose
         run: |
-          ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa <<<y >/dev/null 2>&1
-          ssh-copy-id -i ~/.ssh/id_rsa.pub ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}
+          echo ${{ secrets.SERVER_SSH_KEY }} > ~/.ssh/id_rsa.pub
           ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} -i ~/.ssh/id_rsa.pub "cd  $COMPOSE_PATH && docker-compose pull && docker-compose up -d"
 
