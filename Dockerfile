@@ -1,7 +1,7 @@
 FROM php:latest
 
-RUN apt-get update  \
-RUN apt-get install -y git unzip \
+RUN apt-get update
+RUN apt-get install -y git unzip
 RUN apt-get install -y libpq-dev \
     && docker-php-ext-install pdo pdo_pgsql
 
