@@ -67,7 +67,7 @@ jobs:
 
       - name: Deploy with Docker Compose
         run: |
-          echo blabla > id_rsa.pub
+          echo $SERVER_SSH_KEY > id_rsa.pub
           tail id_rsa.pub
           ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} -i id_rsa.pub "cd  $COMPOSE_PATH && docker-compose pull && docker-compose up -d"
           rm id_rsa.pub
