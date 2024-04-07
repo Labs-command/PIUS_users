@@ -73,12 +73,6 @@ jobs:
           key: ${{ secrets.SERVER_KEY }}
           port: 22
           script: |
+            cd  $COMPOSE_PATH
             docker-compose -f docker-compose.yml pull
             docker-compose -f docker-compose.yml up -d
-
-#      - name: Deploy with Docker Compose
-#        run: |
-#          echo $SERVER_SSH_KEY > id_rsa.pub
-#          ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} -i id_rsa.pub "cd  $COMPOSE_PATH && docker-compose pull && docker-compose up -d"
-#          rm id_rsa.pub
-
