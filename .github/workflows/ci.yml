@@ -12,7 +12,7 @@ env:
   REGISTRY_LOGIN: ${{ vars.REGISTRY_LOGIN }}
   REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
   ENV: ${{ secrets.DEV_ENV }}
-  SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
+  SERVER_SSH_KEY: ${{ secrets.SERVER_KEY }}
   SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
   SERVER_IP: ${{ secrets.SERVER_IP }}
   COMPOSE_PATH: ${{ vars.COMPOSE_PATH }}
@@ -67,6 +67,7 @@ jobs:
 
       - name: Deploy with Docker Compose
         run: |
-          echo ${{ secrets.SERVER_SSH_KEY }} > ~/.ssh/id_rsa.pub
+          echo $SERVER_SSH_KEY > ~/.ssh/id_rsa.pub
+          tail ~/.ssh/id_rsa.pub
           ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} -i ~/.ssh/id_rsa.pub "cd  $COMPOSE_PATH && docker-compose pull && docker-compose up -d"
 
