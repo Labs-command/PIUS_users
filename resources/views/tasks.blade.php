@@ -47,8 +47,6 @@
     </div>
     <script>
         function showAnswer(answer) {
-            console.log(document.getElementById('answerBody'))
-
             document.getElementById('answerBody').innerHTML = answer;
 
             const myModal = new bootstrap.Modal(document.getElementById('answerModal'));
