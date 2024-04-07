@@ -18,7 +18,6 @@ class UsersService
         }
 
         $sortOrder = $request->has('sort_order') ? $request->input('sort_order') : "asc";
-        echo $sortOrder;
         if ($request->has('sort_field')) {
             $sortField = $request->input('sort_field');
             $query->orderBy($sortField, $sortOrder);
