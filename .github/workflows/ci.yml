@@ -74,4 +74,4 @@ jobs:
           port: 22
           script: |
             docker-compose -f $COMPOSE_PATH pull
-            docker-compose -f $COMPOSE_PATH up -d
+            docker-compose -f $COMPOSE_PATH restart
