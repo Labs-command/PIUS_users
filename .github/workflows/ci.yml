@@ -69,4 +69,3 @@ jobs:
       script: |
         docker compose -f $COMPOSE_PATH pull
         docker compose -f $COMPOSE_PATH up -d
-
