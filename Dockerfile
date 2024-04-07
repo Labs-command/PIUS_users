@@ -13,4 +13,4 @@ RUN composer install
 
 EXPOSE 8080:80
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]
+CMD ["php", "artisan", "migrate", "&&", "php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]

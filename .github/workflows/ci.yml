@@ -76,7 +76,7 @@ jobs:
             IMAGE_NAME=${{ vars.REGISTRY_LOGIN }}/${{ vars.REPO_NAME }}:${{ github.sha }}
             mkdir -p ${{ vars.COMPOSE_PATH }}
             rm ${{ vars.COMPOSE_PATH }}/docker-compose.yml
-            printf "%s" "${{ vars.DOCKER_COMPOSE }}" >> ${{ vars.COMPOSE_PATH }}/docker-compose.yml
+            printf "%s" "${{ secrets.DOCKER_COMPOSE }}" >> ${{ vars.COMPOSE_PATH }}/docker-compose.yml
             sed -i "s|~IMAGE~|$IMAGE_NAME|g" ${{ vars.COMPOSE_PATH }}/docker-compose.yml
             docker-compose -f ${{ vars.COMPOSE_PATH }}/docker-compose.yml down
             docker-compose -f ${{ vars.COMPOSE_PATH }}/docker-compose.yml pull
