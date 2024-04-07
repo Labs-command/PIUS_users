@@ -28,6 +28,7 @@ Route::prefix('users')->group(
         Route::post('/user/roles', [UserRolesController::class, 'add']);
         Route::delete('/user/roles', [UserRolesController::class, 'remove']);
 
-        Route::get('/', [ViewsController::class, 'index']);
+        Route::get('/', [ViewsController::class, 'userPage']);
+        Route::get('/moderator', [ViewsController::class, 'moderatorPage']);
     }
 );

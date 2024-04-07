@@ -9,6 +9,16 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+
+    .task-card {
+        margin-bottom: 20px;
+    }
+</style>
 @yield('content')
 </body>
 </html>
