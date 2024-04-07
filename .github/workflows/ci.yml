@@ -57,15 +57,15 @@ jobs:
           docker pull $IMAGE_NAME
           docker run $IMAGE_NAME php artisan test || (echo "Tests failed" && docker rmi $IMAGE_NAME && exit 1)
 
-#  deploy:
-#    name: Deploy
-#    needs: test
-#    uses: appleboy/ssh-action@master
-#    with:
-#      host: ${{ secrets.SERVER_IP }}
-#      username: ${{ secrets.SERVER_USERNAME }}
-#      key: ${{ secrets.SERVER_KEY }}
-#      port: 22
-#      script: |
-#        docker compose -f $COMPOSE_PATH pull
-#        docker compose -f $COMPOSE_PATH up -d
+  deploy:
+    name: Deploy
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy with Docker Compose
+        run: |
+          ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} -i ${{ secrets.SERVER_SSH_KEY }} "cd /path/to/your/app && docker-compose pull && docker-compose up -d"
+
