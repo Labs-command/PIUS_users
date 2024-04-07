@@ -16,15 +16,18 @@ use App\Http\Controllers\ViewsController;
 |
 */
 
-Route::get('/user', [UserController::class, 'list']);
-Route::post('/user', [UserController::class, 'create']);
-Route::put('/user', [UserController::class, 'update']);
-Route::delete('/user', [UserController::class, 'delete']);
+Route::prefix('users')->group(
+    function () {
+        Route::get('/user', [UserController::class, 'list']);
+        Route::post('/user', [UserController::class, 'create']);
+        Route::put('/user', [UserController::class, 'update']);
+        Route::delete('/user', [UserController::class, 'delete']);
 
-Route::get('/user/roles', [UserRolesController::class, 'list']);
-Route::put('/user/roles', [UserRolesController::class, 'set']);
-Route::post('/user/roles', [UserRolesController::class, 'add']);
-Route::delete('/user/roles', [UserRolesController::class, 'remove']);
+        Route::get('/user/roles', [UserRolesController::class, 'list']);
+        Route::put('/user/roles', [UserRolesController::class, 'set']);
+        Route::post('/user/roles', [UserRolesController::class, 'add']);
+        Route::delete('/user/roles', [UserRolesController::class, 'remove']);
 
-Route::get('/', [ViewsController::class, 'index']);
-
+        Route::get('/', [ViewsController::class, 'index']);
+    }
+);

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\UserRolesService;
-class UserRolesController extends Controller
+class UserRolesController
 {
     protected $userRolesService;
 
