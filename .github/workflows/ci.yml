@@ -17,6 +17,7 @@ env:
   SERVER_IP: ${{ secrets.SERVER_IP }}
   COMPOSE_PATH: ${{ vars.COMPOSE_PATH }}
   REPO_NAME: ${{ vars.REPO_NAME }}
+  COMPOSE: ${{ vars.DOCKER_COMPOSE }}
 
 jobs:
   build:
@@ -74,5 +75,9 @@ jobs:
           key: ${{ secrets.SERVER_KEY }}
           port: 22
           script: |
-            docker-compose -f $COMPOSE_PATH pull
-            docker-compose -f $COMPOSE_PATH restart
+            IMAGE_NAME=$REGISTRY_LOGIN/$REPO_NAME:${{ github.sha }}
+            mkdir -p $COMPOSE_PATH
+            printf "%s" "$COMPOSE" >> $COMPOSE_PATH/docker-compose.yml
+            sed -i "s/~IMAGE~/$IMAGE_NAME/g" $COMPOSE_PATH/docker-compose.yml
+            docker-compose -f $COMPOSE_PATH/docker-compose.yml pull
+            docker-compose -f $COMPOSE_PATH/docker-compose.yml restart
