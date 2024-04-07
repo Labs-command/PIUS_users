@@ -73,9 +73,5 @@ jobs:
           key: ${{ secrets.SERVER_KEY }}
           port: 22
           script: |
-            cd  $COMPOSE_PATH
-            echo $COMPOSE_PATH
-            dir $COMPOSE_PATH
-            echo $PWD
             docker-compose -f docker-compose.yml pull
             docker-compose -f docker-compose.yml up -d
