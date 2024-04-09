@@ -3,12 +3,13 @@
 namespace App\Services;
 
 use App\Models\Users;
+use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
 class UserRolesService
 {
-    public function add($userId, $roles)
+    public function add($userId, $roles): array
     {
         try {
             $user = Users::find($userId);
@@ -32,7 +33,7 @@ class UserRolesService
             }
 
             return ['message' => "Roles successfully added"];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::channel('errorlog')->error($e->getMessage());
             return ['message' => "Role add error", 'code' => 500];
         }
@@ -68,7 +69,7 @@ class UserRolesService
             );
 
             return ['message' => "Roles successfully set"];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::channel('errorlog')->error($e->getMessage());
             return ['message' => "Role set error", 'code' => 500];
         }
@@ -84,13 +85,13 @@ class UserRolesService
             }
 
             return $user->roles;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::channel('errorlog')->error($e->getMessage());
             return ['message' => "Role set error", 'code' => 500];
         }
     }
 
-    public function remove($userId, $rolesToRemove)
+    public function remove($userId, $rolesToRemove): array
     {
         try {
             $user = Users::find($userId);
@@ -106,7 +107,7 @@ class UserRolesService
             }
 
             return ['message' => "Roles successfully removed"];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::channel('errorlog')->error($e->getMessage());
             return ['message' => "Role remove error", 'code' => 500];
         }

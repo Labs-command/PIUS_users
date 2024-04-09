@@ -24,7 +24,7 @@ class Users extends Model
         return $this->hasMany(UserRoles::class, 'user_id');
     }
 
-    public static function boot()
+    public static function boot(): void
     {
         parent::boot();
 
