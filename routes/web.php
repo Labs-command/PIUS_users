@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\UserRolesController;
 use App\Http\Controllers\ViewsController;
 
 /*
@@ -18,16 +16,6 @@ use App\Http\Controllers\ViewsController;
 
 Route::prefix('users')->group(
     function () {
-        Route::get('/user', [UserController::class, 'list']);
-        Route::post('/user', [UserController::class, 'create']);
-        Route::put('/user', [UserController::class, 'update']);
-        Route::delete('/user', [UserController::class, 'delete']);
-
-        Route::get('/user/roles', [UserRolesController::class, 'list']);
-        Route::put('/user/roles', [UserRolesController::class, 'set']);
-        Route::post('/user/roles', [UserRolesController::class, 'add']);
-        Route::delete('/user/roles', [UserRolesController::class, 'remove']);
-
         Route::get('/', [ViewsController::class, 'userPage']);
         Route::get('/moderator', [ViewsController::class, 'moderatorPage']);
     }

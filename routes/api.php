@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserRolesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get(
-    '/user', function (Request $request) {
-        return $request->user();
+Route::prefix('/')->group(
+    function () {
+        Route::get('/', [UserController::class, 'list']);
+        Route::post('/', [UserController::class, 'create']);
+        Route::put('/', [UserController::class, 'update']);
+        Route::delete('/', [UserController::class, 'delete']);
+
+        Route::get('/roles', [UserRolesController::class, 'list']);
+        Route::put('/roles', [UserRolesController::class, 'set']);
+        Route::post('/roles', [UserRolesController::class, 'add']);
+        Route::delete('/roles', [UserRolesController::class, 'remove']);
     }
 );
-
