@@ -17,10 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/')->group(
     function () {
-        Route::get('/', [UserController::class, 'list']);
-        Route::post('/', [UserController::class, 'create']);
-        Route::put('/', [UserController::class, 'update']);
-        Route::delete('/', [UserController::class, 'delete']);
+        Route::get('/user', [UserController::class, 'list']);
+        Route::post('/user', [UserController::class, 'create']);
+        Route::put('/user', [UserController::class, 'update']);
+        Route::delete('/user', [UserController::class, 'delete']);
 
         Route::get('/roles', [UserRolesController::class, 'list']);
         Route::put('/roles', [UserRolesController::class, 'set']);
