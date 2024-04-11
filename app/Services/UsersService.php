@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use App\Models\Users;
@@ -9,18 +10,32 @@ use Illuminate\Database\Eloquent\Builder;
 
 class UsersService
 {
+    /**
+     * @throws Exception
+     */
     public function list($request): Collection|array
     {
         $query = Users::query();
 
+
         if ($request->has('search_field') && $request->has('search_value')) {
-            $query->where($request->input('search_field'), 'like', '%' . $request->input('search_value') . '%');
+            $searchField = $request->input('search_field');
+            $searchValue = $request->input('search_value');
+            if (in_array($searchField, ['user_id', 'state'])) {
+                $query->where($searchField, 'like', '%' . $searchValue . '%');
+            } else {
+                throw new Exception("Invalid search field", 400);
+            }
         }
 
         $sortOrder = $request->has('sort_order') ? $request->input('sort_order') : "asc";
         if ($request->has('sort_field')) {
             $sortField = $request->input('sort_field');
-            $query->orderBy($sortField, $sortOrder);
+            if (in_array($sortField, ['user_id', 'state'])) {
+                $query->orderBy($sortField, $sortOrder);
+            } else {
+                throw new Exception("Invalid sort field", 400);
+            }
         }
 
         $offset = $request->has('offset') ? intval($request->input('offset')) : 0;
@@ -60,7 +75,7 @@ class UsersService
             );
 
             return ['message' => "Successfully created", 'code' => 201];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::channel('errorlog')->error($e->getMessage());
             return ['message' => "User create error", 'code' => 500];
         }
@@ -80,7 +95,7 @@ class UsersService
             );
 
             return ['message' => "Successfully updated"];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::channel('errorlog')->error($e->getMessage());
             return ['message' => "User update error", 'code' => 500];
         }
@@ -94,7 +109,7 @@ class UsersService
             Users::destroy($userId);
 
             return ['message' => "Successfully deleted"];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::channel('errorlog')->error($e->getMessage());
             return ['message' => "User delete error", 'code' => 500];
         }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\UsersService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
@@ -47,7 +48,7 @@ class UserController
      *         name="search_field",
      *         in="query",
      *         description="Field to search by",
-     * @OA\Schema(type="string",     enum={"user_id", "state"})
+     * @OA\Schema(type="string",       enum={"user_id", "state"})
      *     ),
      * @OA\Parameter(
      *         name="search_value",
@@ -59,13 +60,13 @@ class UserController
      *         name="sort_field",
      *         in="query",
      *         description="Field to sort by",
-     * @OA\Schema(type="string",     enum={"user_id", "state"})
+     * @OA\Schema(type="string",       enum={"user_id", "state"})
      *     ),
      * @OA\Parameter(
      *         name="sort_order",
      *         in="query",
      *         description="Sort order (asc or desc)",
-     * @OA\Schema(type="string",     enum={"asc", "desc"})
+     * @OA\Schema(type="string",       enum={"asc", "desc"})
      *     ),
      * @OA\Parameter(
      *         name="offset",
@@ -88,21 +89,28 @@ class UserController
      * @OA\Response(
      *         response="200",
      *         description="List of users",
-     * @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/User"))
+     * @OA\JsonContent(type="array",   @OA\Items(ref="#/components/schemas/User"))
      *     ),
      * @OA\Response(
      *         response="500",
-     *         description="Internal Server Error"
+     *         description="Internal Server Error",
+     * @OA\JsonContent(
+     * @OA\Property(property="errors", type="string", example="Internal Server Error")
+     *         )
      *     )
      * )
      */
     public function list(Request $request): JsonResponse
     {
-        $users = $this->userService->list($request);
+        try {
+            $users = $this->userService->list($request);
 
-        return response()->json($users);
+            return response()->json(['data' => $users]);
+        } catch (Exception $e) {
+            $statusCode = $e->getCode() ?: 500;
+            return response()->json(['errors' => $e->getMessage()], $statusCode);
+        }
     }
-
 
     /**
      * @OA\Post(
@@ -120,17 +128,23 @@ class UserController
      *     ),
      * @OA\Response(
      *         response="500",
-     *         description="Internal Server Error"
+     *         description="Internal Server Error",
+     * @OA\JsonContent(
+     * @OA\Property(property="errors",                  type="string", example="Internal Server Error")
+     *         )
      *     )
      * )
      */
     public function create(Request $request): JsonResponse
     {
-        $data = $request->json()->all();
+        try {
+            $data = $request->json()->all();
+            $result = $this->userService->create($data);
 
-        $result = $this->userService->create($data);
-
-        return response()->json($result['message'], $result['code'] ?? 200);
+            return response()->json(['data' => $result['message']], $result['code'] ?? 201);
+        } catch (Exception $e) {
+            return response()->json(['errors' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -149,25 +163,31 @@ class UserController
      *     ),
      * @OA\Response(
      *         response="404",
-     *         description="User not found"
+     *         description="User not found",
+     * @OA\JsonContent(
+     * @OA\Property(property="errors",                  type="string", example="User not found")
+     *         )
      *     ),
      * @OA\Response(
      *         response="500",
-     *         description="Internal Server Error"
+     *         description="Internal Server Error",
+     * @OA\JsonContent(
+     * @OA\Property(property="errors",                  type="string", example="Internal Server Error")
+     *         )
      *     )
      * )
      */
     public function update(Request $request): JsonResponse
     {
-        $data = $request->json()->all();
+        try {
+            $data = $request->json()->all();
+            $result = $this->userService->update($data);
 
-        $result = $this->userService->update($data);
-
-        if (isset($result['code'])) {
-            return response()->json($result['message'], $result['code']);
+            return response()->json(['data' => $result['message']]);
+        } catch (Exception $e) {
+            $statusCode = $e->getCode() ?: 500;
+            return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
-
-        return response()->json($result['message']);
     }
 
     /**
@@ -184,28 +204,38 @@ class UserController
      *     ),
      * @OA\Response(
      *         response="200",
-     *         description="User deleted successfully"
+     *         description="User deleted successfully",
+     * @OA\JsonContent(
+     * @OA\Property(property="data",    type="string", example="Successfully deleted")
+     *         )
      *     ),
      * @OA\Response(
      *         response="404",
-     *         description="User not found"
+     *         description="User not found",
+     * @OA\JsonContent(
+     * @OA\Property(property="errors",  type="string", example="User not found")
+     *         )
      *     ),
      * @OA\Response(
      *         response="500",
-     *         description="Internal Server Error"
+     *         description="Internal Server Error",
+     * @OA\JsonContent(
+     * @OA\Property(property="errors",  type="string", example="Internal Server Error")
+     *         )
      *     )
      * )
      */
     public function delete(Request $request): JsonResponse
     {
-        $data = $request->json()->all();
+        try {
+            $data = $request->json()->all();
+            $result = $this->userService->delete($data);
 
-        $result = $this->userService->delete($data);
-
-        if (isset($result['code'])) {
-            return response()->json($result['message'], $result['code']);
+            return response()->json(['data' => $result['message']]);
+        } catch (Exception $e) {
+            $statusCode = $e->getCode() ?: 500;
+            return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
-
-        return response()->json($result['message']);
     }
 }
+
