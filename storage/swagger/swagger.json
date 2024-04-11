@@ -1,0 +1,106 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "pius_users",
+        "description": "Documentation for the Application API",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://0.0.0.0/api",
+            "description": "pius_users Server #1"
+        }
+    ],
+    "paths": [],
+    "tags": [],
+    "components": {
+        "schemas": {
+            "UserRoles": {
+                "type": "object",
+                "properties": {
+                    "user_id": {
+                        "type": "string",
+                        "description": "guid",
+                        "nullable": false,
+                        "example": "string"
+                    },
+                    "role": {
+                        "type": "string",
+                        "description": "string(255)",
+                        "default": "user",
+                        "nullable": false,
+                        "example": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "datetime",
+                        "nullable": true,
+                        "example": "string"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "datetime",
+                        "nullable": true,
+                        "example": "string"
+                    }
+                },
+                "required": [
+                    "user_id",
+                    "role"
+                ]
+            },
+            "Users": {
+                "type": "object",
+                "properties": {
+                    "user_id": {
+                        "type": "string",
+                        "description": "guid",
+                        "nullable": false,
+                        "example": "string"
+                    },
+                    "state": {
+                        "type": "string",
+                        "description": "string(255)",
+                        "default": "blocked",
+                        "nullable": false,
+                        "example": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "datetime",
+                        "nullable": true,
+                        "example": "string"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "datetime",
+                        "nullable": true,
+                        "example": "string"
+                    },
+                    "roles": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/UserRoles"
+                        }
+                    }
+                },
+                "required": [
+                    "user_id",
+                    "state"
+                ]
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}

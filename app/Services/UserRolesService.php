@@ -84,6 +84,7 @@ class UserRolesService
                 return ['message' => "User not found", 'code' => 404];
             }
 
+            Log::channel('errorlog')->error($user->id);
             return $user->roles;
         } catch (Exception $e) {
             Log::channel('errorlog')->error($e->getMessage());
