@@ -15,7 +15,13 @@ class UserRolesService
             $user = Users::find($userId);
 
             if (!$user) {
-                return ['message' => "User not found", 'code' => 404];
+                throw new Exception("User not found", 404);
+            }
+
+            foreach ($roles as $role) {
+                if (!in_array($role, ['user', 'admin'])) {
+                    throw new Exception("Invalid role: $role", 400);
+                }
             }
 
             $roleRecords = [];
@@ -78,6 +84,7 @@ class UserRolesService
     public function list($userId)
     {
         try {
+
             $user = Users::with('roles')->find($userId);
 
             if (!$user) {
@@ -88,7 +95,7 @@ class UserRolesService
             return $user->roles;
         } catch (Exception $e) {
             Log::channel('errorlog')->error($e->getMessage());
-            return ['message' => "Role set error", 'code' => 500];
+            return ['message' => "Internal server error", 'code' => 500];
         }
     }
 

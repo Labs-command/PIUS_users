@@ -19,6 +19,8 @@ class Users extends Model
     public $incrementing = false;
     protected $primaryKey = 'user_id';
 
+    protected $keyType = "string";
+
     public function roles(): HasMany
     {
         return $this->hasMany(UserRoles::class, 'user_id');

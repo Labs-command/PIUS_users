@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Services\UserRolesService;
@@ -62,17 +63,16 @@ class UserRolesController
      */
     public function add(Request $request): JsonResponse
     {
-        $data = $request->json()->all();
+        try {
+            $data = $request->json()->all();
+            $result = $this->userRolesService->add($data['user_id'], $data['roles']);
 
-        $result = $this->userRolesService->add($data['user_id'], $data['roles']);
-
-        if (isset($result['code'])) {
-            return response()->json($result, $result['code']);
+            return response()->json(['data' => $result]);
+        } catch (Exception $e) {
+            $statusCode = $e->getCode() ?: 500;
+            return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
-
-        return response()->json($result);
     }
-
     /**
      * @OA\Delete(
      *     path="/api/v1/roles",
@@ -102,15 +102,15 @@ class UserRolesController
      */
     public function remove(Request $request): JsonResponse
     {
-        $data = $request->json()->all();
+        try {
+            $data = $request->json()->all();
+            $result = $this->userRolesService->remove($data['user_id'], $data['roles']);
 
-        $result = $this->userRolesService->remove($data['user_id'], $data['roles']);
-
-        if (isset($result['code'])) {
-            return response()->json($result, $result['code']);
+            return response()->json(['data' => $result]);
+        } catch (Exception $e) {
+            $statusCode = $e->getCode() ?: 500;
+            return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
-
-        return response()->json($result);
     }
 
     /**
@@ -142,15 +142,15 @@ class UserRolesController
      */
     public function set(Request $request): JsonResponse
     {
-        $data = $request->json()->all();
+        try {
+            $data = $request->json()->all();
+            $result = $this->userRolesService->set($data['user_id'], $data['roles']);
 
-        $result = $this->userRolesService->set($data['user_id'], $data['roles']);
-
-        if (isset($result['code'])) {
-            return response()->json($result, $result['code']);
+            return response()->json(['data' => $result]);
+        } catch (Exception $e) {
+            $statusCode = $e->getCode() ?: 500;
+            return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
-
-        return response()->json($result);
     }
 
     /**
@@ -181,8 +181,13 @@ class UserRolesController
      */
     public function list(Request $request): JsonResponse
     {
-        $result = $this->userRolesService->list($request->input('user_id'));
+        try {
+            $result = $this->userRolesService->list($request->input('user_id'));
 
-        return response()->json($result);
+            return response()->json(['data' => $result]);
+        } catch (Exception $e) {
+            $statusCode = $e->getCode() ?: 500;
+            return response()->json(['errors' => $e->getMessage()], $statusCode);
+        }
     }
 }

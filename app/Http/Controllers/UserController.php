@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
+use Throwable;
 
 /**
  * @OA\Info(
@@ -183,10 +184,11 @@ class UserController
             $data = $request->json()->all();
             $result = $this->userService->update($data);
 
-            return response()->json(['data' => $result['message']]);
-        } catch (Exception $e) {
+            return response()->json(['data' => $result['message']], $result['code'] ?? 200);
+        } catch (Throwable $e) {
             $statusCode = $e->getCode() ?: 500;
-            return response()->json(['errors' => $e->getMessage()], $statusCode);
+            $errorMessage = $statusCode === 500 ? "Internal Server Error" : $e->getMessage();
+            return response()->json(['errors' => $errorMessage], $statusCode);
         }
     }
 
@@ -217,6 +219,13 @@ class UserController
      *         )
      *     ),
      * @OA\Response(
+     *         response="400",
+     *         description="User ID is required",
+     * @OA\JsonContent(
+     * @OA\Property(property="errors",  type="string", example="User ID is required")
+     *         )
+     *     ),
+     * @OA\Response(
      *         response="500",
      *         description="Internal Server Error",
      * @OA\JsonContent(
@@ -232,9 +241,10 @@ class UserController
             $result = $this->userService->delete($data);
 
             return response()->json(['data' => $result['message']]);
-        } catch (Exception $e) {
+        } catch (Throwable  $e) {
             $statusCode = $e->getCode() ?: 500;
-            return response()->json(['errors' => $e->getMessage()], $statusCode);
+            $errorMessage = $statusCode === 500 ? "Internal Server Error" : $e->getMessage();
+            return response()->json(['errors' => $errorMessage], $statusCode);
         }
     }
 }

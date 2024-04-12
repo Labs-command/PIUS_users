@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Users;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 class UsersService
 {
@@ -55,38 +56,41 @@ class UsersService
 
     public function create($data): array
     {
-        try {
-            DB::transaction(
-                function () use ($data) {
-                    $user = Users::create(
+        DB::transaction(
+            function () use ($data) {
+                $user = Users::create(
+                    [
+                    'state' => $data['state'] ?? 'blocked',
+                    'user_id' => $data['user_id'] ?? Str::uuid(),
+                    ]
+                );
+                $roles = $data['roles'] ?? array('user');
+                foreach ($roles as $role) {
+                    $user->roles()->create(
                         [
-                        'state' => $data['state'] ?? 'blocked',
+                        'role' => $role,
                         ]
                     );
-                    $roles = $data['roles'] ?? array('user');
-                    foreach ($roles as $role) {
-                        $user->roles()->create(
-                            [
-                            'role' => $role,
-                            ]
-                        );
-                    }
                 }
-            );
+            }
+        );
 
-            return ['message' => "Successfully created", 'code' => 201];
-        } catch (Exception $e) {
-            Log::channel('errorlog')->error($e->getMessage());
-            return ['message' => "User create error", 'code' => 500];
-        }
+        return ['message' => "Successfully created", 'code' => 201];
     }
 
+    /**
+     * @throws Exception
+     */
     public function update($data): array
     {
         try {
             $userId = $data['user_id'];
 
             $user = Users::find($userId);
+
+            if (!$user) {
+                throw new Exception("User not found", 404);
+            }
 
             $user->update(
                 [
@@ -97,21 +101,33 @@ class UsersService
             return ['message' => "Successfully updated"];
         } catch (Exception $e) {
             Log::channel('errorlog')->error($e->getMessage());
-            return ['message' => "User update error", 'code' => 500];
+            throw new Exception("User update error", $e->getCode() ?: 500);
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function delete($data): array
     {
         try {
+            if (!isset($data['user_id'])) {
+                throw new Exception("Missing user_id", 400);
+            }
+
             $userId = $data['user_id'];
+            $user = Users::find($userId);
+
+            if (!$user) {
+                throw new Exception("User not found", 404);
+            }
 
             Users::destroy($userId);
 
             return ['message' => "Successfully deleted"];
         } catch (Exception $e) {
             Log::channel('errorlog')->error($e->getMessage());
-            return ['message' => "User delete error", 'code' => 500];
+            throw new Exception($e->getMessage(), $e->getCode() ?: 500);
         }
     }
 }
