@@ -14,7 +14,7 @@ use App\Http\Controllers\ViewsController;
 |
 */
 
-Route::prefix('users')->group(
+Route::middleware(['auth.web'])->prefix('users')->group(
     function () {
         Route::get('/', [ViewsController::class, 'userPage']);
         Route::get('/moderator', [ViewsController::class, 'moderatorPage']);
