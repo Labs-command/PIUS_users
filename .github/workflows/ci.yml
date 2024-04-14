@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+      - dev
 
 env:
   REGISTRY_LOGIN: ${{ vars.REGISTRY_LOGIN }}
@@ -14,13 +15,13 @@ env:
   ENV: ${{ secrets.DEV_ENV }}
   SERVER_SSH_KEY: ${{ secrets.SERVER_KEY }}
   SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+  JWT_PUBLIC_KEY: ${{ secrets.JWT_PUBLIC_KEY }}
   SERVER_IP: ${{ secrets.SERVER_IP }}
   REPO_NAME: ${{ vars.REPO_NAME }}
 
 jobs:
   build:
     name: Build
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
     steps:
@@ -35,6 +36,7 @@ jobs:
           cat routes/web.php
           IMAGE_NAME=$REGISTRY_LOGIN/$REPO_NAME:${{ github.sha }}
           printf "%s" "$ENV" > .env
+          printf "%s" "$JWT_PUBLIC_KEY" > keys/public.pem
           docker build . -t $IMAGE_NAME
           docker push $IMAGE_NAME
 
