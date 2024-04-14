@@ -18,7 +18,7 @@ class ApiAuth
         $this->tokenService = $tokenService;
     }
 
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
         $token = $request->header('Authorization') ?: $request->cookie('X-Pius-Auth');
 

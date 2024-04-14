@@ -45,7 +45,7 @@ class UserRolesService
         }
     }
 
-    public function set($userId, $roles)
+    public function set($userId, $roles): array
     {
         try {
             $user = Users::find($userId);
@@ -81,7 +81,7 @@ class UserRolesService
         }
     }
 
-    public function list($userId)
+    public function list($userId): mixed
     {
         try {
 

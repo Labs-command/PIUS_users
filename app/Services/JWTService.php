@@ -39,7 +39,7 @@ class JWTService
         }
     }
 
-    public function refreshToken($refreshToken)
+    public function refreshToken($refreshToken): mixed
     {
         if (!$refreshToken) {
             return false;
