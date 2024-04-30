@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\views\UsersController;
+use App\Http\Controllers\views\ModeratorsController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ViewsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,11 +18,12 @@ use App\Http\Controllers\ViewsController;
 Route::prefix('users')->group(
 //Route::middleware(['auth.web'])->prefix('users')->group(
     function () {
-        Route::get('/', [ViewsController::class, 'userPage'])->name('users.page');
-        Route::get('/create', [ViewsController::class, 'createTaskPage'])->name('users.tasks.create.page');
-        Route::post('/create', [ViewsController::class, 'createTask'])->name('users.tasks.create');
-        Route::get('/moderator', [ViewsController::class, 'moderatorPage'])->name('moderators.page');
-        Route::post('/moderator/confirm/{id?}', [ViewsController::class, 'reportedTaskConfirm'])->name('moderators.tasks.confirm');
-        Route::post('/moderator/reject/{id?}', [ViewsController::class, 'reportedTaskReject'])->name('moderators.tasks.reject');
+        Route::get('/', [UsersController::class, 'userPage'])->name('users.page');
+        Route::get('/create', [UsersController::class, 'createTaskPage'])->name('users.tasks.create.page');
+        Route::post('/create', [UsersController::class, 'createTask'])->name('users.tasks.create');
+
+        Route::get('/moderator', [ModeratorsController::class, 'moderatorPage'])->name('moderators.page');
+        Route::post('/moderator/confirm/{id?}', [ModeratorsController::class, 'reportedTaskConfirm'])->name('moderators.tasks.confirm');
+        Route::post('/moderator/reject/{id?}', [ModeratorsController::class, 'reportedTaskReject'])->name('moderators.tasks.reject');
     }
 );
