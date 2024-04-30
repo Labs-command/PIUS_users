@@ -31,6 +31,13 @@
             <option value="20">20</option>
         </select>
     </div>
+    @if($user)
+        <div class="col-md-2">
+            <a href="{{ route("users.tasks.create.page")  }}">
+                <button class="btn btn-success" onclick="" type="button">Создать <b>+</b></button>
+            </a>
+        </div>
+    @endif
 </div>
 <div class="row mt-3">
     <div class="col-md-4">
@@ -100,7 +107,7 @@
             const sortValue = document.getElementById('sortValue').value;
             const searchInput = document.getElementById('searchInput').value;
 
-            let url = window.location.href.split('?')[0];
+            let url = "{{ route('users.page') }}";
             url = url.endsWith('/') ? url.slice(0, -1) : url;
 
             const params = [];
@@ -163,7 +170,7 @@
             const offset = parseInt(localStorage.getItem('offset') || '0', 10);
             const searchInput = document.getElementById('searchInput').value;
 
-            let url = window.location.href.split('?')[0];
+            let url = "{{ route('moderators.page')  }}";
             url = url.endsWith('/') ? url.slice(0, -1) : url;
 
             const params = [];

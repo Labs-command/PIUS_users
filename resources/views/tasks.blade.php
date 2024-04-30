@@ -33,9 +33,9 @@
     </div>
     @if(!$user)
         <script>
-            function accept_task(taskId) {
+            function confirm_task(taskId) {
                 var xhr = new XMLHttpRequest();
-                xhr.open("POST", "/users/moderator/confirm/" + taskId, true);
+                xhr.open("POST", "{{ route('moderators.tasks.confirm') }}/" + taskId, true);
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4) {
@@ -67,7 +67,7 @@
 
             function reject_task(taskId) {
                 var xhr = new XMLHttpRequest();
-                xhr.open("POST", "/users/moderator/reject/" + taskId, true);
+                xhr.open("POST", "{{ route('moderators.tasks.reject')  }}/" + taskId, true);
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4) {
