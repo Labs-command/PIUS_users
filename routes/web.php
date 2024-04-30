@@ -18,7 +18,8 @@ Route::prefix('users')->group(
 //Route::middleware(['auth.web'])->prefix('users')->group(
     function () {
         Route::get('/', [ViewsController::class, 'userPage']);
-        Route::get('/search', [ViewsController::class, 'searchTasksPage']);
         Route::get('/moderator', [ViewsController::class, 'moderatorPage']);
+        Route::post('/moderator/confirm/{id}', [ViewsController::class, 'reportedTaskConfirm']);
+        Route::post('/moderator/reject/{id}', [ViewsController::class, 'reportedTaskReject']);
     }
 );

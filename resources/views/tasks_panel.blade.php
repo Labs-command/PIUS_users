@@ -1,4 +1,6 @@
 <h1 class="mt-4">Список задач</h1>
+<div id="messages" class="row">
+</div>
 <div class="row mt-3">
     <div class="col-md-2">
         <label>
@@ -11,7 +13,6 @@
     <div class="col-md-2">
         <select id="sortField" class="form-select">
             <option value="subject">Тема</option>
-            <option value="id">ID</option>
             <option value="created_at">Дата создания</option>
         </select>
     </div>
@@ -48,5 +49,96 @@
     function clearAuthorId() {
         localStorage.removeItem('author_id');
         window.location.href = getUrl();
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = localStorage.getItem('search_query');
+        const sortField = localStorage.getItem('sort_field');
+        const sortValue = localStorage.getItem('sort_value');
+        const limit = localStorage.getItem('limit') || '10';
+        const offset = parseInt(localStorage.getItem('offset') || '0', 10);
+
+        if (searchInput) {
+            document.getElementById('searchInput').value = searchInput;
+        }
+        if (sortField) {
+            document.getElementById('sortField').value = sortField;
+        }
+        if (sortValue) {
+            document.getElementById('sortValue').value = sortValue;
+        }
+        if (limit) {
+            document.getElementById('limit').value = limit;
+        }
+
+        if (offset === 0) {
+            document.getElementById("previous_page").style.display = "none";
+        }
+    });
+
+    function search() {
+        window.location.href = getUrl();
+    }
+
+    function authorTasks(authorId) {
+        localStorage.setItem('author_id', authorId);
+        window.location.href = getUrl();
+    }
+
+    function updateFields() {
+        const search = document.getElementById('searchInput').value;
+        const sortField = document.getElementById('sortField').value;
+        const sortValue = document.getElementById('sortValue').value;
+        const limit = document.getElementById('limit').value;
+
+        localStorage.setItem('search_query', search);
+        localStorage.setItem('sort_field', sortField);
+        localStorage.setItem('sort_value', sortValue);
+        localStorage.setItem('limit', limit);
+    }
+
+    function getUrl() {
+        updateFields();
+
+        const limit = parseInt(document.getElementById('limit').value, 10);
+        const offset = parseInt(localStorage.getItem('offset') || '0', 10);
+        const sortField = document.getElementById('sortField').value;
+        const sortValue = document.getElementById('sortValue').value;
+        const searchInput = document.getElementById('searchInput').value;
+
+        let url = window.location.href.split('?')[0];
+
+        const params = [];
+
+        if (searchInput.trim() !== '') {
+            params.push(`search_query=${searchInput}`);
+        }
+        if (sortField.trim() !== '') {
+            params.push(`sort_field=${sortField}`);
+        }
+        if (sortValue.trim() !== '') {
+            params.push(`sort_value=${sortValue}`);
+        }
+        if (limit) {
+            params.push(`limit=${limit}`);
+        }
+        if (offset) {
+            params.push(`offset=${offset}`);
+        }
+        const authorId = localStorage.getItem('author_id');
+        if (authorId) {
+            params.push(`author_id=${authorId}`);
+        }
+
+        if (params.length > 0) {
+            url += '?' + params.join('&');
+        }
+
+        return url;
+    }
+
+    function changeLimit() {
+        const limit = parseInt(document.getElementById('limit').value, 10);
+        localStorage.setItem('limit', limit);
+        search();
     }
 </script>

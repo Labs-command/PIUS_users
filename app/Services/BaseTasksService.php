@@ -14,20 +14,20 @@ class BaseTasksService
 
     public function __construct(string $apiEntity, int $apiVersion)
     {
-        $this->baseUrl = env('TASKS_BASE_URL') . '/' . $apiEntity .'/api/v' . $apiVersion . '/tasks/';
+        $this->baseUrl = env('TASKS_BASE_URL') . '/api/v' . $apiVersion . '/' . $apiEntity . '/';
     }
 
     /**
      * @throws RequestException
+     * @throws Exception
      */
-    private function retryRequest(callable $request, array $args): ?array
+    protected function retryRequest(callable $request, array $args): array|bool
     {
         $retryCount = 0;
 
         while ($retryCount < self::MAX_RETRY_COUNT) {
             try {
                 $response = $request(...$args);
-
                 if (!is_null($response)) {
                     return $response;
                 }
@@ -38,7 +38,11 @@ class BaseTasksService
             $retryCount++;
         }
 
-        throw new RequestException($response);
+        if($response) {
+            throw new RequestException($response);
+        }
+
+        throw new Exception('Internal server error');
     }
 
 
@@ -77,8 +81,8 @@ class BaseTasksService
         return $this->retryRequest(
             function (array $criteria) {
                 $response = Http::post($this->baseUrl . 'search', $criteria);
-
                 if ($response->successful()) {
+                    //                    dd($response->json());
                     return $response->json();
                 }
 
@@ -116,10 +120,10 @@ class BaseTasksService
      * @return array Флаг успешного удаления задачи.
      * @throws RequestException
      */
-    public function deleteTask(int $id): array
+    public function deleteTask($id): bool
     {
         return $this->retryRequest(
-            function (int $id) {
+            function ($id) {
                 $response = Http::delete($this->baseUrl . $id);
                 return $response->successful();
             }, [$id]
