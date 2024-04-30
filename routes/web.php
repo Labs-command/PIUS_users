@@ -14,9 +14,11 @@ use App\Http\Controllers\ViewsController;
 |
 */
 
-Route::middleware(['auth.web'])->prefix('users')->group(
+Route::prefix('users')->group(
+//Route::middleware(['auth.web'])->prefix('users')->group(
     function () {
         Route::get('/', [ViewsController::class, 'userPage']);
+        Route::get('/search', [ViewsController::class, 'searchTasksPage']);
         Route::get('/moderator', [ViewsController::class, 'moderatorPage']);
     }
 );

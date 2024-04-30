@@ -12,7 +12,7 @@
                         <div class="card-body d-flex flex-column justify-content-between">
                             <h5 class="card-title">{{ $task['subject'] }}</h5>
                             <p class="card-text">{{ $task['text'] }}</p>
-                            <p class="card-text"><small class="text-muted">Добавлено: {{ $task['date_added'] }}</small></p>
+{{--                            <p class="card-text"><small class="text-muted">Добавлено: {{ $task['date_added'] }}</small></p>--}}
                             <p class="card-text">Автор: {{ $task['author']['name'] }}</p>
                             @if (!empty($task['answer']))
                                 <div class="alert alert-info" role="alert">

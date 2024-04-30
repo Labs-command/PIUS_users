@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth.api'])->prefix('/')->group(
+Route::prefix('/')->group(
+//Route::middleware(['auth.api'])->prefix('/')->group(
     function () {
         Route::get('/user', [UserController::class, 'list']);
         Route::post('/user', [UserController::class, 'create']);

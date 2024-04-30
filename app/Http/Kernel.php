@@ -46,7 +46,7 @@ class Kernel extends HttpKernel
         ValidatePostSize::class,
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
-        ApiAuth::class,
+    //        ApiAuth::class,
     ];
 
     /**
@@ -80,8 +80,8 @@ class Kernel extends HttpKernel
      */
     protected $middlewareAliases = [
         'auth' => Authenticate::class,
-        'auth.api' => ApiAuth::class,
-        'auth.web' => WebAuth::class,
+    //        'auth.api' => ApiAuth::class,
+    //        'auth.web' => WebAuth::class,
         'auth.basic' => AuthenticateWithBasicAuth::class,
         'auth.session' => AuthenticateSession::class,
         'cache.headers' => SetCacheHeaders::class,
