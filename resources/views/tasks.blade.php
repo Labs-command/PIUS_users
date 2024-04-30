@@ -6,19 +6,27 @@
     <div id="container" class="container">
         @include('tasks_panel')
         <div class="row mt-3">
-            @foreach($tasks as $task)
-                <div id="task_{{ $task['task_id']  }}" class="col-md-6 mt-2 mb-2">
+            @if(count($tasks) > 0)
+                @foreach($tasks as $task)
+                    <div id="task_{{ $task['task_id']  }}" class="col-md-6 mt-2 mb-2">
+                        <div class="card task-card h-100">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                @include('task', ['task' => $task, 'user' => $user])
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <div class="col-md-12 mt-2 mb-2">
                     <div class="card task-card h-100">
-                        <div class="card-body d-flex flex-column justify-content-between">
-                            @if($user)
-                                @include('task', ['task' => $task])
-                            @else
-                                @include('reported-task', ['task' => $task])
-                            @endif
+                        <div class="card-body d-flex flex-column justify-content-center">
+                            <div class="d-flex justify-content-center">
+                                <h3 class="text-center">Задач нет</h3>
+                            </div>
                         </div>
                     </div>
                 </div>
-            @endforeach
+            @endif
         </div>
         @include('pagination_buttons')
         @include('modal', ['modalHeader' => 'Ответ на задачу'])

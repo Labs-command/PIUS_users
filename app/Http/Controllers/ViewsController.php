@@ -7,10 +7,7 @@ use App\Services\TasksService;
 use Exception;
 use Illuminate\Http\Request;
 use \Illuminate\Http\Response;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Http;
 
 class ViewsController
 {
@@ -25,14 +22,13 @@ class ViewsController
     {
         try {
             $criteria = [
-                "search_query" => $request->input('search_query'),
+                "search_query" => $request->input('search_query') ?: "",
                 "sort_field" => $request->input('sort_field'),
                 "sort_value" => $request->input('sort_order') ?: 'asc',
                 "offset" => $request->input('offset') ?: 0,
                 "limit" => $request->input('limit') ?: 10,
                 "author_id" => $request->input('author_id')
             ];
-
             $tasks = $this->tasksService->searchTasks($criteria);
 
             return view('tasks', ['tasks' => $tasks['data'], 'user' => true]);
