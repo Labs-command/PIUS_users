@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\UserRolesController;
+use App\Http\Controllers\UserApiController;
+use App\Http\Controllers\UserRolesApiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,14 +18,14 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/')->group(
 //Route::middleware(['auth.api'])->prefix('/')->group(
     function () {
-        Route::get('/user', [UserController::class, 'list']);
-        Route::post('/user', [UserController::class, 'create']);
-        Route::put('/user', [UserController::class, 'update']);
-        Route::delete('/user', [UserController::class, 'delete']);
+        Route::get('/user', [UserApiController::class, 'list']);
+        Route::post('/user', [UserApiController::class, 'create']);
+        Route::put('/user', [UserApiController::class, 'update']);
+        Route::delete('/user', [UserApiController::class, 'delete']);
 
-        Route::get('/roles', [UserRolesController::class, 'list']);
-        Route::put('/roles', [UserRolesController::class, 'set']);
-        Route::post('/roles', [UserRolesController::class, 'add']);
-        Route::delete('/roles', [UserRolesController::class, 'remove']);
+        Route::get('/roles', [UserRolesApiController::class, 'list']);
+        Route::put('/roles', [UserRolesApiController::class, 'set']);
+        Route::post('/roles', [UserRolesApiController::class, 'add']);
+        Route::delete('/roles', [UserRolesApiController::class, 'remove']);
     }
 );

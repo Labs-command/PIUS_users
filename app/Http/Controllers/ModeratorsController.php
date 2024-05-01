@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\views;
+namespace App\Http\Controllers;
 
 use App\Services\ReportedTasksService;
 use App\Services\TasksService;
 use Exception;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Redirect;
 
 class ModeratorsController
 {

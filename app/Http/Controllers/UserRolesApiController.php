@@ -25,7 +25,7 @@ use OpenApi\Annotations as OA;
  *     )
  * )
  */
-class UserRolesController
+class UserRolesApiController
 {
     protected UserRolesService $userRolesService;
 

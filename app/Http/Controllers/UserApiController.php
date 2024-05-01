@@ -33,7 +33,7 @@ use Throwable;
  *     )
  * )
  */
-class UserController
+class UserApiController
 {
     protected UsersService $userService;
 

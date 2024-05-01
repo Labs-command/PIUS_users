@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\views;
+namespace App\Http\Controllers;
 
 use App\Services\ReportedTasksService;
 use App\Services\TasksService;
