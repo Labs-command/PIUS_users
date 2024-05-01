@@ -8,6 +8,8 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class UsersController
@@ -28,13 +30,25 @@ class UsersController
                 "limit" => $request->input('limit') ?: 10,
                 "author_id" => $request->input('author_id')
             ];
-            $tasks = $this->tasksService->searchTasks($criteria);
+            $cacheKey = json_encode($criteria);
 
-            return view('tasks', ['tasks' => $tasks['data'], 'user' => true]);
+            if (Cache::has($cacheKey)) {
+                $tasks = Cache::get($cacheKey);
+            } else {
+                $tasks = $this->tasksService->searchTasks($criteria);
+                Cache::put($cacheKey, $tasks, now()->addMinutes(1));
+            }
+
+            $user = true;
+
+            return view('tasks', ['tasks' => $tasks['data'], 'user' => $user]);
+
         } catch (Exception $e) {
             return view('error', ['message' => 'Произошла ошибка при загрузке задач. Пожалуйста, попробуйте снова позже.']);
         }
     }
+
+
     public function createTaskPage(): View
     {
 

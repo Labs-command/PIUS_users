@@ -82,11 +82,10 @@ class BaseTasksService
             function (array $criteria) {
                 $response = Http::post($this->baseUrl . 'search', $criteria);
                 if ($response->successful()) {
-                    //                    dd($response->json());
                     return $response->json();
                 }
 
-                return null;
+                return [];
             }, [$criteria]
         );
     }
