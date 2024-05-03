@@ -22,8 +22,8 @@ class ModeratorsController
     {
         try {
             $criteria = [
-                "search_value" => $request->input('search_query'),
-                "sort_field" => $request->input('sort_field'),
+                "search_value" => $request->input('search_query') ?: "",
+                "sort_field" => $request->input('sort_field') ?: "",
                 "sort_value" => $request->input('sort_order') ?: 'asc',
                 "offset" => $request->input('offset') ?: 0,
                 "limit" => $request->input('limit') ?: 10,

@@ -30,14 +30,14 @@ class UsersController
                 "limit" => $request->input('limit') ?: 10,
                 "author_id" => $request->input('author_id')
             ];
-            $cacheKey = json_encode($criteria);
+            //            $cacheKey = json_encode($criteria);
 
-            if (Cache::has($cacheKey)) {
-                $tasks = Cache::get($cacheKey);
-            } else {
+            //            if (Cache::has($cacheKey)) {
+            //                $tasks = Cache::get($cacheKey);
+            //            } else {
                 $tasks = $this->tasksService->searchTasks($criteria);
-                Cache::put($cacheKey, $tasks, now()->addMinutes(1));
-            }
+            //                Cache::put($cacheKey, $tasks, now()->addMinutes(1));
+            //            }
 
             $user = true;
 

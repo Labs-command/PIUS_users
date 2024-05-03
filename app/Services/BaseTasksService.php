@@ -80,6 +80,7 @@ class BaseTasksService
     {
         return $this->retryRequest(
             function (array $criteria) {
+
                 $response = Http::post($this->baseUrl . 'search', $criteria);
                 if ($response->successful()) {
                     return $response->json();
