@@ -6,6 +6,8 @@ use App\Services\UsersService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Http\Resources\UserResource;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use OpenApi\Annotations as OA;
 use Throwable;
 
@@ -31,7 +33,7 @@ use Throwable;
  *     )
  * )
  */
-class UserController
+class UserApiController
 {
     protected UsersService $userService;
 
@@ -101,12 +103,12 @@ class UserController
      *     )
      * )
      */
-    public function list(Request $request): JsonResponse
+    public function list(Request $request): JsonResponse|AnonymousResourceCollection
     {
         try {
             $users = $this->userService->list($request);
 
-            return response()->json(['data' => $users]);
+            return UserResource::collection($users);
         } catch (Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             return response()->json(['errors' => $e->getMessage()], $statusCode);

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserRolesResource;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Services\UserRolesService;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use OpenApi\Annotations as OA;
 
 /**
@@ -23,7 +25,7 @@ use OpenApi\Annotations as OA;
  *     )
  * )
  */
-class UserRolesController
+class UserRolesApiController
 {
     protected UserRolesService $userRolesService;
 
@@ -179,12 +181,12 @@ class UserRolesController
      *     )
      * )
      */
-    public function list(Request $request): JsonResponse
+    public function list(Request $request): JsonResponse|AnonymousResourceCollection
     {
         try {
             $result = $this->userRolesService->list($request->input('user_id'));
 
-            return response()->json(['data' => $result]);
+            return UserRolesResource::collection($result);
         } catch (Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             return response()->json(['errors' => $e->getMessage()], $statusCode);

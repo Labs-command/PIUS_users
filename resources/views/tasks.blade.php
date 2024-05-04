@@ -3,59 +3,99 @@
 @section('title', 'Задачи')
 
 @section('content')
-    <div class="container">
-        <h1 class="mt-4">Список задач</h1>
-        <label>
-            <input type="text" class="form-control mt-3" placeholder="Поиск по задачам">
-        </label>
+    <div id="container" class="container">
+        @include('tasks_panel')
         <div class="row mt-3">
-            @foreach($tasks as $task)
-                <div class="col-md-6">
-                    <div class="card task-card h-100">
-                        <div class="card-body d-flex flex-column justify-content-between">
-                            <h5 class="card-title">{{ $task['subject'] }}</h5>
-                            <p class="card-text">{{ $task['text'] }}</p>
-                            <p class="card-text">Дата создания: {{ $task['date_added'] }}</p>
-                            <p class="card-text">Автор: {{ $task['author']['name'] }}</p>
-                            <div id="answer_{{ $task['id'] }}" style="display: none;">
-
+            @if(count($tasks) > 0)
+                @foreach($tasks as $task)
+                    <div id="task_{{ $task['task_id']  }}" class="col-md-6 mt-2 mb-2">
+                        <div class="card task-card h-100">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                @include('task', ['task' => $task, 'user' => $user])
                             </div>
-                            <div class="mt-auto">
-                                <button class="btn btn-info " onclick="showAnswer('{{ $task['answer'] }}')">Показать ответ</button>
-                                <button class="btn btn-secondary mt-2"
-                                        onclick="showAuthorInfo({{ $task['author']['id'] }})">
-                                    Задачи автора
-                                </button>
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <div class="col-md-12 mt-2 mb-2">
+                    <div class="card task-card h-100">
+                        <div class="card-body d-flex flex-column justify-content-center">
+                            <div class="d-flex justify-content-center">
+                                <h3 class="text-center">Задач нет</h3>
                             </div>
                         </div>
                     </div>
                 </div>
-            @endforeach
+            @endif
         </div>
+        @include('pagination_buttons')
+        @include('modal', ['modalHeader' => 'Ответ на задачу'])
     </div>
-    <div class="modal fade" id="answerModal" tabindex="-1" aria-labelledby="answerModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="answerModalLabel">Ответ на задачу</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="answerBody">
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-        function showAnswer(answer) {
-            document.getElementById('answerBody').innerHTML = answer;
+    @if(!$user)
+        <script>
+            function confirm_task(taskId) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "{{ route('moderators.tasks.confirm') }}/" + taskId, true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            let notification = document.createElement('div');
+                            notification.className = 'alert alert-success';
+                            notification.innerHTML = 'Задача успешно принята!';
+                            let messagesElement = document.getElementById('messages');
+                            messagesElement.appendChild(notification);
+                            document.getElementById('task_' + taskId).remove()
+                            setTimeout(function () {
+                                messagesElement.removeChild(notification);
+                            }, 5000);
+                        } else if (xhr.status === 500) {
+                            let errorNotification = document.createElement('div');
+                            errorNotification.className = 'alert alert-danger';
+                            errorNotification.innerHTML = 'Произошла ошибка при обработке запроса!';
+                            let messagesElement = document.getElementById('messages');
+                            messagesElement.appendChild(errorNotification);
+                            setTimeout(function () {
+                                messagesElement.removeChild(errorNotification);
+                            }, 5000);
+                        }
+                    }
+                };
+                xhr.send();
+            }
 
-            const myModal = new bootstrap.Modal(document.getElementById('answerModal'));
-            myModal.show();
-        }
 
-        function showAuthorInfo(authorId) {
-            window.location.href = '/users/user/' + authorId;
-        }
-    </script>
-
+            function reject_task(taskId) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "{{ route('moderators.tasks.reject')  }}/" + taskId, true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            let notification = document.createElement('div');
+                            notification.className = 'alert alert-success';
+                            notification.innerHTML = 'Задача успешно отклонена!';
+                            let messagesElement = document.getElementById('messages');
+                            messagesElement.appendChild(notification);
+                            document.getElementById('task_' + taskId).remove()
+                            setTimeout(function () {
+                                messagesElement.removeChild(notification);
+                            }, 5000);
+                        } else if (xhr.status === 500) {
+                            let errorNotification = document.createElement('div');
+                            errorNotification.className = 'alert alert-danger';
+                            errorNotification.innerHTML = 'Произошла ошибка при обработке запроса!';
+                            let messagesElement = document.getElementById('messages');
+                            messagesElement.appendChild(errorNotification);
+                            setTimeout(function () {
+                                messagesElement.removeChild(errorNotification);
+                            }, 5000);
+                        }
+                    }
+                };
+                xhr.send();
+            }
+        </script>
+    @endif
 @endsection
+
